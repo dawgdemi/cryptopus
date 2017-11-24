@@ -62,6 +62,7 @@ module ApplicationHelper
   def current_version
     hash = File.file?('.build') ? File.read('.build') : ''
     link_to("Version " + File.read('.version') + hash, '/changelog')
+    end
   end
 
   private

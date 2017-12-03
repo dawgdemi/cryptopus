@@ -16,7 +16,7 @@ class ChangelogReader
   end
 
   def changelogs
-    @changelogs.sort.reverse
+    @changelogs
   end
 
   private
@@ -31,18 +31,21 @@ class ChangelogReader
   end
 
   def parse_changelog_lines(changelog_file)
-    change_log = nil
-    changelog_file.each_line do |l|
-      if h = changelog_header_line(l)
-        if change_log.present?
-          @changelogs << change_log
+    changelog_entry = nil;
+    changelog_file.each_line do |line|
+      if h = changelog_header_line(line)
+	if changelog_entry.present?
+	  @changelogs << changelog_entry
 	end
-        change_log = ChangelogEntry.new(h)
-      elsif entry = changelog_entry_line(l)
-        if change_log.present? 
-          change_log.add_log_entry(l)
+        changelog_entry = ChangelogEntry.new(h)
+      elsif changelog_entry.present?
+        if e = changelog_entry_line(line)
+	  changelog_entry.add_change(e)
 	end
       end
+    end
+    if changelog_entry.present?
+      @changelogs << changelog_entry
     end
   end
 

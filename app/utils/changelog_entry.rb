@@ -5,13 +5,14 @@ class ChangelogEntry
   end
 
   def version
-    version
+    @version
   end
  
   def log_entries
-    changes
+    @changes
   end
 
-  def add_log_entry(change)
-    changes << change
+  def add_change(change)
+    @changes << change
   end
+end

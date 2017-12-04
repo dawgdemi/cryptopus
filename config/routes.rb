@@ -6,6 +6,7 @@
 #  https://github.com/puzzle/cryptopus.
 
 Rails.application.routes.draw do
+  
 
   scope "(:locale)", locale: /en|de|fr|zh/ do
     namespace :recryptrequests do
@@ -13,10 +14,6 @@ Rails.application.routes.draw do
       post 'recrypt'
     end
     
-    namespace :changelog do
-      get 'index'
-    end
-
     resources :teams do
       resources :teammembers
       resources :groups do
@@ -63,8 +60,10 @@ Rails.application.routes.draw do
     post 'wizard/apply'
 
     get 'search', to: 'search#index'
-
+    
     root to: 'search#index'
+    
+    get 'changelog', to: 'changelog#index'
   end
 
   scope '/api', module: 'api' do
@@ -92,6 +91,6 @@ Rails.application.routes.draw do
           get :candidates
         end
       end
-    end
+    end 
   end
 end

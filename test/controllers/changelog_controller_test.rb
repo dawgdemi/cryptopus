@@ -2,7 +2,7 @@ require "test_helper"
 
 describe ChangelogController do
   it "should get index" do
-    get changelog_index_url
+    get 'changelog'
     value(response).must_be :success?
   end
 

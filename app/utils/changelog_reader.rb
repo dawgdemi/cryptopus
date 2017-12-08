@@ -31,36 +31,36 @@ class ChangelogReader
   def parse_changelog(file)
     log_entry = nil
     file.each_line do |line|
-      h = header_line(line)
-      e = entry_line(line)
-      log_entry = evaluate_log_entry(log_entry, h, e)
+      header_line = header_line(line)
+      entry_line = entry_line(line)
+      log_entry = evaluate_current_line(log_entry, header_line, entry_line)
     end
     @changelogs << log_entry
   end
 
-  def evaluate_log_entry(log_entry, h, e)
+  def evaluate_current_line(log_entry, header_line, entry_line)
     if log_entry.nil?
-      h.present? ? log_entry = ChangelogEntry.new(h) : log_entry
-    elsif h.present?
-      log_entry = add_and_get_new_entry(log_entry, h)
-    elsif e.present?
-      log_entry.add(e)
+      header_line.present? ? log_entry = ChangelogEntry.new(header_line) : log_entry
+    elsif header_line.present?
+      log_entry = add_and_get_new_entry(log_entry, header_line)
+    elsif entry_line.present?
+      log_entry.add(entry_line)
     end
     log_entry
   end
 
-  def add_and_get_new_entry(log_entry, h)
-    @changelogs << log_entry
-    ChangelogEntry.new(h)
+  def add_and_get_new_entry(log_entry, header_line)
+    changelogs << log_entry
+    ChangelogEntry.new(header_line)
   end
 
-  def header_line(h)
-    h.strip!
-    h[/^## [^\s]+ ((\d+\.)+(\d+))$/i, 1]
+  def header_line(header_line)
+    header_line.strip!
+    header_line[/^## [^\s]+ ((\d+\.)+(\d+))$/i, 1]
   end
 
-  def entry_line(e)
-    e.strip!
-    e[/^\*\s*(.*)/, 1]
+  def entry_line(entry_line)
+    entry_line.strip!
+    entry_line[/^\*\s*(.*)/, 1]
   end
 end

@@ -51,7 +51,7 @@ class ChangelogReader
 
   def changelog_header_line(h)
     h.strip!
-    h[/^## [^\s]+ ((\d+\.)+(\d+\.)+(\d+))$/i, 1]
+    h[/^## [^\s]+ ((\d+\.)+(\d+))$/i, 1]
   end
 
   def changelog_entry_line(e)

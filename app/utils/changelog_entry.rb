@@ -1,18 +1,13 @@
 class ChangelogEntry
+  attr_reader :version
+  attr_reader :log_entries
+
   def initialize(version)
     @version = version
-    @changes = []
+    @log_entries = []
   end
 
-  def version
-    @version
-  end
- 
-  def log_entries
-    @changes
-  end
-
-  def add_change(change)
-    @changes << change
+  def add(change)
+    @log_entries << change
   end
 end

@@ -4,6 +4,5 @@
 #  https://github.com/puzzle/cryptopus.
 
 class ChangelogController < ApplicationController
-  def index
-  end
+  def index; end
 end

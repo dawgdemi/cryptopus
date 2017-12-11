@@ -4,6 +4,9 @@
 # https://github.com/puzzle/cryptopus.
 
 class ChangelogReader
+  VERSION_REGEX = /^## [^\s]+ ((\d+\.)+(\d+))$/i.freeze
+  ENTRY_REGEX = /^\*\s*(.*)/.freeze
+
   class << self
     def changelog
       ChangelogReader.new.changelogs
@@ -56,11 +59,11 @@ class ChangelogReader
 
   def header_line(header_line)
     header_line.strip!
-    header_line[/^## [^\s]+ ((\d+\.)+(\d+))$/i, 1]
+    header_line[VERSION_REGEX, 1]
   end
 
   def entry_line(entry_line)
     entry_line.strip!
-    entry_line[/^\*\s*(.*)/, 1]
+    entry_line[ENTRY_REGEX, 1]
   end
 end

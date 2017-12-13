@@ -4,8 +4,8 @@
 # https://github.com/puzzle/cryptopus.
 
 class ChangelogReader
-  VERSION_REGEX = /^## [^\s]+ ((\d+\.)+(\d+))$/i.freeze
-  ENTRY_REGEX = /^\*\s*(.*)/.freeze
+  VERSION_REGEX = /^## [^\s]+ ((\d+\.)+(\d+))$/i
+  ENTRY_REGEX = /^\*\s*(.*)/
 
   class << self
     def changelog

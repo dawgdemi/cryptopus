@@ -41,27 +41,45 @@ class ChangelogReaderTest < ActiveSupport::TestCase
     end
 
     before do
-      ChangelogReader.instance_variable_set(:@changelogs, [])
+      subject.instance_variable_set(:@changelogs, [])
     end
 
-    test 'reads log correctly' do
+    test 'reads log correctly' do      
       subject.send(:parse_changelog, changelog_lines)
+
 
       changelogs = subject.instance_variable_get(:@changelogs)
 
-      assert_equal(changelogs.count, 2)
+      assert_equal(2, changelogs.count)
 
       version13 = changelogs[0]
-      assert_equal(version13.count, 2)
-      assert_equal(version13.version, '1.3')
-      assert_equal(version13.log_entries[0], 'change')
-      assert_equal(version13.log_entries[1], 'another change')
+      assert_equal(2, version13.log_entries.count)
+      assert_equal('1.3', version13.version)
+      assert_equal('change', version13.log_entries[0])
+      assert_equal('another change', version13.log_entries[1])
 
       version11 = changelogs[1]
-      assert_equal(version11.count, 1)
-      assert_equal(version11.version, '1.1')
-      assert_equal(version11.log_entries, 'changes')
+      assert_equal(1, version11.log_entries.count)
+      assert_equal('1.1', version11.version)
+      assert_equal('changes', version11.log_entries[0])
     end
-          
+
+    test 'header line parsed' do
+      version = subject.send(:header_line, '## Version 0.0')
+      assert_equal('0.0', version)
+    end
+
+    test 'entry line parsed' do
+      entry = subject.send(:entry_line, '* change')
+      assert_equal('change', entry)
+    end
+
+    test 'doesnt parse invalid line' do
+      version = subject.send(:header_line, 'invalid')
+      assert_nil(version)
+
+      entry = subject.send(:entry_line, 'invalid')
+      assert_nil(entry)
+    end
   end
 end

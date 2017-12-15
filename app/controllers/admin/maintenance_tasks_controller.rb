@@ -15,7 +15,7 @@ class Admin::MaintenanceTasksController < Admin::AdminController
 
   # GET /admin/maintenance_tasks/1/prepare
   def prepare
-    task = MaintenanceTask::TASKS[params[:id].to_i]
+    task = MaintenanceTask.tasks[params[:id].to_i]
     @maintenance_task = MaintenanceTask.constantize_class(task)
     flash[:notice] = @maintenance_task.hint
   end

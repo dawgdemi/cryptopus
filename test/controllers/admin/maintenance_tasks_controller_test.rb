@@ -10,6 +10,7 @@ require 'test/unit'
 
 class Admin::MaintenanceTasksControllerTest < ActionController::TestCase
   include ControllerTest::DefaultHelper
+  
   test 'error message if execute fails' do
     task = MaintenanceTask.new(users(:admin))
     MaintenanceTask.stubs(:initialize_task).returns(task)
@@ -18,7 +19,7 @@ class Admin::MaintenanceTasksControllerTest < ActionController::TestCase
     login_as(:admin)
     post :execute, params: { id: 0, task_params: {root_password: 'password'} }
 
-    assert_match /Task failed/, flash[:error]
+    assert_match(/Task failed/, flash[:error])
   end
 
   test 'notice if execute succeed' do
@@ -29,7 +30,7 @@ class Admin::MaintenanceTasksControllerTest < ActionController::TestCase
     login_as(:admin)
     post :execute, params: { id: 0, task_params: {root_password: 'password'} }
 
-    assert_match /successfully/, flash[:notice]
+    assert_match(/successfully/, flash[:notice])
   end
 
   test 'prepares task from array' do
@@ -42,5 +43,17 @@ class Admin::MaintenanceTasksControllerTest < ActionController::TestCase
     login_as(:admin)
     get :index
     assert_equal MaintenanceTasks::RootAsAdmin, assigns(:maintenance_tasks).first
+  end
+
+  test 'removed ldap users task available if ldap enabled' do
+    enable_ldap
+    login_as(:admin)
+    get :prepare, params: { id: 2, task_params: {label: ':removed_ldap_users'} }
+    assert_equal MaintenanceTasks::RemovedLdapUsers, assigns(:maintenance_task)
+  end
+
+  test 'removed ldap users task unavailable if ldap disabled' do
+    login_as(:admin)
+    assert_raise(NoMethodError) { get :prepare, params: { id: 2, task_params: {label: ':removed_ldap_users'} } }
   end
 end

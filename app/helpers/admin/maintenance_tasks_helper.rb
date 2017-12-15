@@ -32,4 +32,11 @@ module Admin::MaintenanceTasksHelper
     method_name = 'check_box_tag'
     send(method_name, "task_params[#{label}]", '', checked, default_field_options)
   end
+
+  def execute_removed_ldap_users
+    users = @maintenance_task.removed_ldap_users
+    return users if users.present?
+    flash[:error] = t('flashes.admin.maintenance_tasks.ldap_connection.failed')
+    []
+  end
 end
